@@ -4,6 +4,7 @@ import com.iridium.iridiumcore.gui.GUI;
 import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
@@ -28,7 +29,7 @@ public class IridiumCore extends JavaPlugin {
     private NMS nms;
     private MultiVersion multiVersion;
     private boolean isTesting = false;
-    private BukkitTask saveTask;
+    private ScheduledTask saveTask;
 
     private static IridiumCore instance;
 
@@ -78,15 +79,17 @@ public class IridiumCore extends JavaPlugin {
         if (isTesting) return;
 
         // Save data regularly
-        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
+        saveTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, task -> this.saveData(), 1, 20 * 60 * 5);
 
         // Automatically update all inventories
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-            InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
-            if (inventoryHolder instanceof GUI) {
-                ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
-            }
-        }), 0, 1);
+        Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, scheduledTask -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
+            player.getScheduler().run(this,task -> {
+                InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
+                if (inventoryHolder instanceof GUI) {
+                    ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
+                }
+            },null);
+        }), 1, 1);
     }
 
     /**

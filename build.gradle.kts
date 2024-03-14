@@ -11,7 +11,7 @@ description = "IridiumCore"
 allprojects {
     apply(plugin = "java")
 
-    java.sourceCompatibility = JavaVersion.VERSION_1_8
+    java.sourceCompatibility = JavaVersion.VERSION_17
 
     repositories {
         mavenCentral()
@@ -23,6 +23,7 @@ allprojects {
 
     dependencies {
         // Dependencies that we want to shade in
+        implementation(fileTree("/libs"))
         implementation("com.github.cryptomorin:XSeries:9.8.1") { isTransitive = false }
 
         // Other dependencies that are not required or already available at runtime
