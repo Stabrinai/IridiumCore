@@ -7,13 +7,13 @@ import io.papermc.lib.PaperLib;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 
@@ -28,7 +28,9 @@ public class IridiumCore extends JavaPlugin {
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
-    private boolean isTesting = false;
+    @Setter
+    @Getter
+    private static boolean testing = false;
     private ScheduledTask saveTask;
 
     private static IridiumCore instance;
@@ -38,7 +40,7 @@ public class IridiumCore extends JavaPlugin {
      */
     public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
-        this.isTesting = true;
+        setTesting(true);
         // Disable logging
         getLogger().setFilter(record -> false);
     }
@@ -49,6 +51,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onLoad() {
+        instance = this;
         // Create the data folder in order to make Jackson work
         getDataFolder().mkdir();
 
@@ -63,10 +66,9 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        instance = this;
         setupMultiVersion();
 
-        if (!PaperLib.isSpigot() && !isTesting) {
+        if (!PaperLib.isSpigot() && !isTesting()) {
             // isSpigot returns true if the server is using spigot or a fork
             getLogger().warning("CraftBukkit isn't supported, please use spigot or one of its forks");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -76,7 +78,7 @@ public class IridiumCore extends JavaPlugin {
         // Register plugin listeners
         registerListeners();
 
-        if (isTesting) return;
+        if (isTesting()) return;
 
         // Save data regularly
         saveTask = Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, task -> this.saveData(), 1, 20 * 60 * 5);
@@ -97,7 +99,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        if (isTesting) return;
+        if (isTesting()) return;
         if (saveTask != null) saveTask.cancel();
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);

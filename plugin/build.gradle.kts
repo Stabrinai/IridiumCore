@@ -4,7 +4,7 @@ dependencies {
     multiVersionProjects.forEach { implementation(it) }
 
     // Dependencies that we want to shade in
-    implementation("de.tr7zw:item-nbt-api:2.12.2")
+    implementation("de.tr7zw:item-nbt-api:2.13.1")
     implementation("com.iridium:IridiumColorAPI:1.0.9")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.3")
     implementation("com.fasterxml.jackson.core:jackson-core:2.14.3")
@@ -13,11 +13,11 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.3")
     implementation("org.yaml:snakeyaml:2.2")
     implementation("io.papermc:paperlib:1.0.8")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
 
     // Other dependencies that are not required or already available at runtime
     compileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
 }
 
 tasks {
