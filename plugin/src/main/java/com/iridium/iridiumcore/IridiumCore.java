@@ -85,7 +85,7 @@ public class IridiumCore extends JavaPlugin {
 
         // Automatically update all inventories
         Bukkit.getGlobalRegionScheduler().runAtFixedRate(this, scheduledTask -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-            player.getScheduler().run(this,task -> {
+            player.getScheduler().run(this, task -> {
                 InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
                 if (inventoryHolder instanceof GUI) {
                     ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());

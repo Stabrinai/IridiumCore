@@ -17,7 +17,7 @@ dependencies {
 
     // Other dependencies that are not required or already available at runtime
     compileOnly("org.jetbrains:annotations:24.1.0")
-    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
 }
 
 tasks {

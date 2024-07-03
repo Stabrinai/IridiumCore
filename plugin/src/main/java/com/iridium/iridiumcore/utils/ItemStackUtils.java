@@ -1,7 +1,8 @@
 package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSkull;
+import com.cryptomorin.xseries.profiles.builder.XSkull;
+import com.cryptomorin.xseries.profiles.objects.Profileable;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBT;
@@ -70,7 +71,7 @@ public class ItemStackUtils {
                 skullData = SkinUtils.getHeadData(SkinUtils.getUUID(skullData));
             }
 
-            itemStack = XSkull.of(itemStack).profile(skullData).apply();
+            itemStack = XSkull.of(itemStack).profile(Profileable.detect(skullData)).apply();
         }
 
         return itemStack;

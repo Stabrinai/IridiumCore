@@ -69,7 +69,7 @@ public class NMS_V1_20_R1 implements NMS {
 
         // WorldBorder worldBorder = new WorldBorder();
         // worldBorder.world = ((CraftWorld) centerLocation.getWorld()).getHandle();
-        if(centerLocation.getWorld().getEnvironment() == Environment.NETHER)
+        if(centerLocation.getWorld().getName().endsWith("_nether"))
             worldBorder.setCenter(centerLocation.getBlockX()*8 + 0.5, centerLocation.getBlockZ()*8 + 0.5);
         else
             worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
